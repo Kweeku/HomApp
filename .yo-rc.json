@@ -1,0 +1,31 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "com.waziup.homa",
+            "nativeLanguage": "en"
+        },
+        "jhipsterVersion": "5.8.2",
+        "baseName": "homa",
+        "packageName": "com.waziup.homa",
+        "packageFolder": "com/waziup/homa",
+        "serverPort": "8081",
+        "authenticationType": "jwt",
+        "hibernateCache": "ehcache",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": "no",
+        "buildTool": "gradle",
+        "enableTranslation": true,
+        "applicationType": "monolith",
+        "testFrameworks": [],
+        "jhiPrefix": "jhi",
+        "skipClient": true,
+        "skipUserManagement": true,
+        "nativeLanguage": "en",
+        "languages": [
+            "en",
+            "ru"
+        ]
+    }
+}
