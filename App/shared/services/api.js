@@ -1,7 +1,7 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
 
-import AppConfig from '../../config/app-config'
+import AppConfig from '../../Config/app-config'
 
 // our "constructor"
 const create = () => {

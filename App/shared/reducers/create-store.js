@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import Reactotron from 'reactotron-react-native'
+import '../../Config/reactotron-config'
 
 import RehydrationServices from '../services/rehydration.service'
-import ReduxPersist from '../../config/redux-persist'
-import Config from '../../config/debug-config'
+import ReduxPersist from '../../Config/redux-persist'
+import Config from '../../Config/debug-config'
 // creates the store
 export default (rootReducer, rootSaga) => {
   /* ------------- Redux Configuration ------------- */
@@ -14,8 +15,13 @@ export default (rootReducer, rootSaga) => {
 
   /* ------------- Saga Middleware ------------- */
 
-  const sagaMonitor = Config.useReactotron ? console.tron.createSagaMonitor() : null
-  const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
+  let sagaMiddleware;
+  if (__DEV__) {
+    const sagaMonitor = Reactotron.createSagaMonitor();
+    sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+  } else {
+    sagaMiddleware = createSagaMiddleware();
+  }
   middleware.push(sagaMiddleware)
 
   /* ------------- Assemble Middleware ------------- */
@@ -39,6 +45,6 @@ export default (rootReducer, rootSaga) => {
   return {
     store,
     sagasManager,
-    sagaMiddleware,
+    sagaMiddleware
   }
 }

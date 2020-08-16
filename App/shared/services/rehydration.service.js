@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { persistStore } from 'redux-persist'
 
-import DebugConfig from '../../config/debug-config'
-import ReduxPersist from '../../config/redux-persist'
+import DebugConfig from '../../Config/debug-config'
+import ReduxPersist from '../../Config/redux-persist'
 import StartupActions from '../reducers/startup.reducer'
 
 const updateReducers = (store) => {

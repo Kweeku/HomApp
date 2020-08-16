@@ -9,7 +9,7 @@ import Config from './debug-config'
 if (Config.useReactotron) {
   Reactotron.configure({
     // host: '10.0.3.2' // default is localhost (on android don't forget to `adb reverse tcp:9090 tcp:9090`)
-    name: 'Ignite JHipster App', // would you like to see your app's name?,
+    name: 'HomApp', // would you like to see your app's name?,
   })
     .setAsyncStorageHandler(AsyncStorage)
     .useReactNative({ asyncStorage: false })

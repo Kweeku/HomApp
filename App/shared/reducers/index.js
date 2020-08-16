@@ -3,7 +3,7 @@ import { persistReducer } from 'redux-persist'
 
 import configureStore from './create-store'
 import rootSaga from '../sagas'
-import ReduxPersist from '../../config/redux-persist'
+import ReduxPersist from '../../Config/redux-persist'
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({

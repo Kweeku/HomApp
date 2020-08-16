@@ -2,11 +2,10 @@ import { AppState, Linking } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { Provider } from 'react-redux'
 import { Images } from '../shared/themes'
-import { isLoggedIn, selectAuthToken } from '../modules/login/login.sagas'
 
 import createStore from '../shared/reducers'
 import Colors from '../shared/themes/colors'
-import '../config/reactotron-config'
+import '../Config/app-config'
 import AccountActions from '../shared/reducers/account.reducer'
 import LoginActions from '../modules/login/login.reducer'
 

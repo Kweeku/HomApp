@@ -1,7 +1,7 @@
 import { takeLatest, all } from 'redux-saga/effects'
 import API from '../services/api'
 import FixtureAPI from '../services/fixture-api'
-import DebugConfig from '../../config/debug-config'
+import DebugConfig from '../../Config/debug-config'
 
 /* ------------- Types ------------- */
 
