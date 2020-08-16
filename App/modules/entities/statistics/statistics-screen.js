@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, Image, View, Platform, Button, TouchableOpacity } from 'react-native'
-import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/HomAScreen'
+import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
 import SensorActions from './sensor.reducer'
