@@ -95,7 +95,7 @@ export default class RoomTwo extends Component {
                 <View style={{ padding: 15, flex: 1, borderRadius: 15 }}>
                     <ProgressChart
                         data={progressTemp}
-                        width={400}
+                        width={Dimensions.get('screen').width-35}
                         height={220}
                         strokeWidth={16}
                         radius={32}
@@ -104,7 +104,8 @@ export default class RoomTwo extends Component {
                         style={{
                             borderRadius: 15,
                             elevation: 2,
-                            padding: 3
+                            flex: 1,
+                            padding: 3,
                         }}
                         hasLegend={true}
                     />
@@ -112,7 +113,7 @@ export default class RoomTwo extends Component {
                 <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
                     <LineChart
                         data={data}
-                        width={400}
+                        width={Dimensions.get('screen').width - 35}
                         height={220}
                         chartConfig={chartConfig}
                         style={{
@@ -125,7 +126,7 @@ export default class RoomTwo extends Component {
                 <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
                     <LineChart
                         data={gasData}
-                        width={400}
+                        width={Dimensions.get('screen').width - 35}
                         height={220}
                         chartConfig={chartConfig}
                         style={{
