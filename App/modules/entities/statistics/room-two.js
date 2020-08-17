@@ -41,9 +41,8 @@ export default class RoomTwo extends Component {
         const tempVal = dev2 ? dev2.sensors[3] : [];
         const motionVal = dev2 ? dev2.sensors[2] : [];
         const progressTemp = {
-            labels: ['Humidity', 'Temp'],
+            labels: ['Hum', 'Temp'],
             data: [humVal.value.value / 100, tempVal.value.value / 100],
-            legend: ['Humidity', 'Temperature'] // optional
         }
         const data = {
             labels: ["January", "February", "March", "April", "May", "June"],

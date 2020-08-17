@@ -42,30 +42,8 @@ class LoginScreen extends React.Component {
     })
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    let nextLoading = nextProps.fetching;
-    if (nextLoading !== prevState.loading) {
-      return { loading: nextLoading };
-    }
-    // if (nextProps.loggedIn !== prevState.loggedIn) {
-    //   return { loggedIn: nextProps.loggedIn };
-    // }
-    else return null;
-  }
+  isUserLoggedIn = () => {
 
-  componentDidMount() {
-    console.tron.log(`Is the user logged in: ${this.props.loggedIn}`)
-
-    this.backHandler();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!this.props.fetching) {
-      if (prevProps.fetching && this.props.error) {
-        Alert.alert('Error', this.props.error, [{ text: 'OK' }])
-      }
-    }
-    
     if (this.props.loggedIn) {
       console.tron.log(`Is the user logged in: ${this.props.loggedIn}`)
 
@@ -80,6 +58,8 @@ class LoginScreen extends React.Component {
               title: {
                 text: 'Welcome!',
                 color: Colors.snow,
+                fontFamily: 'Staatliches-Regular',
+                fontSize: 24
               },
               leftButtons: [
                 {
@@ -98,6 +78,34 @@ class LoginScreen extends React.Component {
         }
       });
     }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let nextLoading = nextProps.fetching;
+    if (nextLoading !== prevState.loading) {
+      return { loading: nextLoading };
+    }
+    // if (nextProps.loggedIn !== prevState.loggedIn) {
+    //   return { loggedIn: nextProps.loggedIn };
+    // }
+    else return null;
+  }
+
+  componentDidMount() {
+    console.tron.log(`Is the user logged in: ${this.props.loggedIn}`)
+
+    this.isUserLoggedIn();
+    this.backHandler();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.fetching) {
+      if (prevProps.fetching && this.props.error) {
+        Alert.alert('Error', this.props.error, [{ text: 'OK' }])
+      }
+    }
+    
+    this.isUserLoggedIn();
   }
 
   handlePressLogin = () => {
