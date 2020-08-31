@@ -54,7 +54,7 @@ export const appStack = {
                   },
                   topBar: {
                     title: {
-                      text: 'Welcome!',
+                      text: 'Welcome Back!',
                       color: Colors.snow,
                     },
                     leftButtons: [

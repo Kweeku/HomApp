@@ -56,7 +56,7 @@ class LoginScreen extends React.Component {
             },
             topBar: {
               title: {
-                text: 'Welcome!',
+                text: 'Welcome Back!',
                 color: Colors.snow,
                 fontFamily: 'Staatliches-Regular',
                 fontSize: 24

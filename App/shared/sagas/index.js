@@ -14,6 +14,7 @@ import { ChangePasswordTypes } from '../../modules/account/password/change-passw
 import { UserTypes } from '../../shared/reducers/user.reducer'
 import { SensorTypes } from '../../modules/entities/statistics/sensor.reducer'
 import { DeviceTypes } from '../../modules/account/device/device.reducer'
+import { ActuatorTypes } from '../../modules/entities/lights/actuator.reducer'
 // ignite-jhipster-saga-redux-import-needle
 
 /* ------------- Sagas ------------- */
@@ -26,6 +27,7 @@ import { changePassword } from '../../modules/account/password/change-password.s
 import { getAccount, updateAccount } from '../../shared/sagas/account.sagas'
 import { getUser, getUsers, updateUser, deleteUser } from '../../shared/sagas/user.sagas'
 import { getSensor, getSensorData, getSensors, updateSensor, deleteSensor, createSensor } from '../../modules/entities/statistics/sensor.sagas'
+import { getActuator, getActuators, updateActuator, deleteActuator, createActuator, updateActuatorValue } from '../../modules/entities/lights/actuator.sagas'
 import { getDevice, getDevices, updateDevice, deleteDevice, createDevice } from '../../modules/account/device/device.sagas'
 
 // ignite-jhipster-saga-method-import-needle
@@ -62,6 +64,13 @@ export default function* root() {
     takeLatest(SensorTypes.SENSOR_UPDATE_REQUEST, updateSensor, api),
     takeLatest(SensorTypes.SENSOR_DELETE_REQUEST, deleteSensor, api),
     takeLatest(SensorTypes.SENSOR_CREATE_REQUEST, createSensor, api),
+
+    takeLatest(ActuatorTypes.ACTUATOR_REQUEST, getActuator, api),
+    takeLatest(ActuatorTypes.ACTUATOR_ALL_REQUEST, getActuators, api),
+    takeLatest(ActuatorTypes.ACTUATOR_UPDATE_REQUEST, updateActuator, api),
+    takeLatest(ActuatorTypes.ACTUATOR_UPDATE_VALUE_REQUEST, updateActuatorValue, api),
+    takeLatest(ActuatorTypes.ACTUATOR_DELETE_REQUEST, deleteActuator, api),
+    takeLatest(ActuatorTypes.ACTUATOR_CREATE_REQUEST, createActuator, api),
 
     takeLatest(DeviceTypes.DEVICE_REQUEST, getDevice, api),
     takeLatest(DeviceTypes.DEVICE_ALL_REQUEST, getDevices, api),
