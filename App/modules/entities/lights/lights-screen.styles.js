@@ -115,7 +115,7 @@ export default StyleSheet.create({
         textAlign: 'center',
         marginTop: 12,
         color: Colors.panther,
-        ...Fonts.style.normal
+        ...Fonts.style.list_element
     },
     transfers: {
         marginVertical: sizeWidth(1),

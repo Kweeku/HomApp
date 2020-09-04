@@ -48,11 +48,15 @@ const style = {
     fontFamily: type.text,
     fontSize: size.regular,
   },
+  list_element: {
+    fontFamily: type.text,
+    fontSize: size.h5,
+  },
   description: {
     fontFamily: type.text,
     fontSize: size.medium,
   },
-  empty:{
+  empty: {
     fontFamily: type.empty,
     fontSize: size.regular
   }

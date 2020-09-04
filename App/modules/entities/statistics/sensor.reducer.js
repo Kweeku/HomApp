@@ -6,7 +6,7 @@ import Immutable from 'seamless-immutable'
 const { Types, Creators } = createActions({
     sensorRequest: ['deviceId', 'sensorId'],
     sensorAllRequest: ['deviceId'],
-    sensorDataRequest: ['deviceId', 'sensorId'],
+    sensorDataRequest: ['options'],
     sensorCreateRequest: ['deviceId', 'sensorId'],
     sensorUpdateRequest: ['deviceId','sensor'],
     sensorDeleteRequest: ['deviceId','sensorId'],

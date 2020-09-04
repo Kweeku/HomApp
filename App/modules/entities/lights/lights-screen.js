@@ -3,12 +3,16 @@ import { ScrollView, Text, Image, View, Platform, Button, FlatList } from 'react
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
+import * as Keychain from 'react-native-keychain';
 
 import { Images } from '../../../shared/themes'
 import styles from './lights-screen.styles'
 import ActuatorActions from './actuator.reducer'
 import DeviceActions from '../../account/device/device.reducer'
+import LoginActions from '../../login/login.reducer';
 import ItemActuator from './ItemActuator'
+
+let credentials = null;
 
 class LightScreen extends React.Component {
     constructor(props) {
@@ -24,6 +28,7 @@ class LightScreen extends React.Component {
         }
         // Navigation.events().bindComponent(this)
         this.setActuators();
+        this.authIntervalCall();
     }
 
     setActuators() {
@@ -48,6 +53,33 @@ class LightScreen extends React.Component {
             console.tron.log(this.state.actuators);
         }
 
+    }
+
+    retriveCredentials = async () => {
+        try {
+            // Retrieve the credentials
+            credentials = await Keychain.getGenericPassword();
+            if (credentials) {
+                console.tron.log(
+                    'Credentials successfully loaded for user ' + credentials.username
+                );
+            } else {
+                console.log('No credentials stored');
+            }
+        } catch (error) {
+            console.tron.log("Keychain couldn't be accessed!", error);
+        }
+        // await Keychain.resetGenericPassword();
+    }
+
+    getAuth = () => {
+        if (credentials !== null) {
+            this.props.attemptLogin(credentials.username, credentials.password)
+        }
+    }
+
+    authIntervalCall() {
+        setInterval(this.getAuth, 3000)
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -118,6 +150,7 @@ const mapDispatchToProps = (dispatch) => {
         getAllActuators: (deviceId) => dispatch(ActuatorActions.actuatorAllRequest(deviceId)),
         getActuator: (deviceId, actuatorId) => dispatch(ActuatorActions.actuatorRequest(deviceId, actuatorId)),
         getDevices: () => dispatch(DeviceActions.deviceAllRequest()),
+        attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password)),
     }
 }
 

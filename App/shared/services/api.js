@@ -56,7 +56,7 @@ const create = () => {
   const deleteSensor = (deviceId, sensorId) => api.delete('/devices/' + deviceId + '/sensors/' + sensorId)
   const updateSensor = (deviceId, sensorId, name, sensorKind, quantityKind, unit, calib) =>
     api.put('/devices/' + deviceId + '/sensors/' + sensorId + '/' + name, sensorKind, quantityKind, unit, calib)
-  const getSensorData = (deviceId, sensorId) => api.get('/devices/' + deviceId + '/sensors/' + sensorId + '/values?limit=100')
+  const getSensorData = (options) => api.get('/sensors_data', options)
 
   const createActuator = (deviceId, actuatorId) => api.post('/devices/' + deviceId + '/actuators/', actuatorId)
   const getActuators = (deviceId) => api.get('/devices/' + deviceId + '/actuators')
@@ -64,7 +64,7 @@ const create = () => {
   const deleteActuator = (deviceId, actuatorId) => api.delete('/devices/' + deviceId + '/actuators/' + actuatorId)
   const updateActuator = (deviceId, actuatorId, name, actuatorKind, valueType, value) =>
     api.put('/devices/' + deviceId + '/actuators/' + actuatorId + '/' + name, actuatorKind, valueType, value)
-  const updateActuatorValue = (deviceId, actuatorId, value) => api.delete('/devices/' + deviceId + '/actuators/' + actuatorId + '/' + value)
+  const updateActuatorValue = (deviceId, actuatorId, value) => api.put('/devices/' + deviceId + '/actuators/' + actuatorId + '/value', value)
 
   const createGateway = (gatewayId) => api.post('/gateways/', gatewayId)
   const getGateways = () => api.get('/gateways')

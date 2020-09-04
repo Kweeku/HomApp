@@ -133,6 +133,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -202,6 +203,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+      compile 'com.android.support:multidex:1.0.1' //enter the latest version
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

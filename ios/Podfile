@@ -36,6 +36,10 @@ target 'HomA' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
+
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
   target 'HomATests' do
     inherit! :search_paths
     # Pods for testing
