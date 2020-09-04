@@ -4,29 +4,29 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-    sensorRequest: ['deviceId', 'sensorId'],
-    sensorAllRequest: ['deviceId'],
-    sensorDataRequest: ['options'],
-    sensorCreateRequest: ['deviceId', 'sensorId'],
-    sensorUpdateRequest: ['deviceId','sensor'],
-    sensorDeleteRequest: ['deviceId','sensorId'],
+    actuatorRequest: ['deviceId', 'actuatorId'],
+    actuatorAllRequest: ['deviceId'],
+    actuatorCreateRequest: ['deviceId', 'actuatorId'],
+    actuatorUpdateRequest: ['deviceId', 'actuatorId', 'name', 'actuator_kind', 'value_type', 'value'],
+    actuatorUpdateValueRequest: ['deviceId', 'actuatorId', 'value'],
+    actuatorDeleteRequest: ['deviceId', 'actuatorId'],
 
-    sensorSuccess: ['sensor'],
-    sensorAllSuccess: ['sensors'],
-    sensorDataSuccess: ['sensorData'],
-    sensorUpdateSuccess: ['sensor'],
-    sensorDeleteSuccess: [],
-    sensorCreateSuccess: [],
+    actuatorSuccess: ['actuator'],
+    actuatorAllSuccess: ['actuators'],
+    actuatorUpdateSuccess: ['actuator'],
+    actuatorUpdateValueSuccess: ['actuator'],
+    actuatorDeleteSuccess: [],
+    actuatorCreateSuccess: [],
 
-    sensorFailure: ['error'],
-    sensorAllFailure: ['error'],
-    sensorDataFailure: ['error'],
-    sensorUpdateFailure: ['error'],
-    sensorDeleteFailure: ['error'],
-    sensorCreateFailure: ['error']
+    actuatorFailure: ['error'],
+    actuatorAllFailure: ['error'],
+    actuatorUpdateFailure: ['error'],
+    actuatorUpdateValueFailure: ['error'],
+    actuatorDeleteFailure: ['error'],
+    actuatorCreateFailure: ['error']
 })
 
-export const SensorTypes = Types
+export const ActuatorTypes = Types
 export default Creators
 
 /* ------------- Initial State ------------- */
@@ -34,18 +34,17 @@ export default Creators
 export const INITIAL_STATE = Immutable({
     fetchingOne: null,
     fetchingAll: null,
-    fetchingData: null,
     updating: null,
+    updatingValue: null,
     deleting: null,
     creating: null,
-    sensor: null,
-    sensors: null,
-    sensorData: null,
+    actuator: null,
+    actuators: null,
     errorOne: null,
     errorAll: null,
     errorUpdating: null,
+    errorUpdatingValue: null,
     errorDeleting: null,
-    errorData: null,
     errorCreating: null
 })
 
@@ -55,27 +54,25 @@ export const INITIAL_STATE = Immutable({
 export const request = (state) =>
     state.merge({
         fetchingOne: true,
-        sensor: null
+        actuator: null
     })
 
 // request the data from an api
 export const allRequest = (state) =>
     state.merge({
         fetchingAll: true,
-        sensors: null
-    })
-
-// request the data from an api
-export const dataRequest = (state) =>
-    state.merge({
-        fetchingData: true,
-        sensorData: null
+        actuators: null
     })
 
 // request to update from an api
 export const updateRequest = (state) =>
     state.merge({
         updating: true
+    })
+// request to update value from an api
+export const updateValueRequest = (state) =>
+    state.merge({
+        updatingValue: true
     })
 // request to delete from an api
 export const deleteRequest = (state) =>
@@ -92,47 +89,49 @@ export const createRequest = (state) =>
 
 // successful api lookup for single entity
 export const success = (state, action) => {
-    const { sensor } = action
+    const { actuator } = action
     return state.merge({
         fetchingOne: false,
         errorOne: null,
-        sensor
+        actuator
     })
 }
 // successful api lookup for all entities
 export const allSuccess = (state, action) => {
-    const { sensors } = action
+    const { actuators } = action
     return state.merge({
         fetchingAll: false,
         errorAll: null,
-        sensors
+        actuators
     })
 }
 
-// successful api lookup for all entities
-export const dataSuccess = (state, action) => {
-    const { sensorData } = action
-    return state.merge({
-        fetchingData: false,
-        errorData: null,
-        sensorData
-    })
-}
 // successful api update
 export const updateSuccess = (state, action) => {
-    const { sensor } = action
+    const { actuator } = action
     return state.merge({
         updating: false,
         errorUpdating: null,
-        sensor
+        actuator
     })
 }
+
+// successful api value update
+export const updateValueSuccess = (state, action) => {
+    const { actuator } = action
+    return state.merge({
+        updatingValue: false,
+        errorUpdatingValue: null,
+        actuator
+    })
+}
+
 // successful api delete
 export const deleteSuccess = (state) => {
     return state.merge({
         deleting: false,
         errorDeleting: null,
-        sensor: null
+        actuator: null
     })
 }
 
@@ -141,7 +140,7 @@ export const createSuccess = (state) => {
     return state.merge({
         creating: false,
         errorCreating: null,
-        sensor: null
+        actuator: null
     })
 }
 
@@ -151,7 +150,7 @@ export const failure = (state, action) => {
     return state.merge({
         fetchingOne: false,
         errorOne: error,
-        sensor: null
+        actuator: null
     })
 }
 // Something went wrong fetching all entities.
@@ -160,17 +159,7 @@ export const allFailure = (state, action) => {
     return state.merge({
         fetchingAll: false,
         errorAll: error,
-        sensors: null
-    })
-}
-
-// Something went wrong fetching all entities.
-export const dataFailure = (state, action) => {
-    const { error } = action
-    return state.merge({
-        fetchingData: false,
-        errorData: error,
-        sensorData: null
+        actuators: null
     })
 }
 
@@ -180,16 +169,27 @@ export const updateFailure = (state, action) => {
     return state.merge({
         updating: false,
         errorUpdating: error,
-        sensor: state.sensor
+        actuator: state.actuator
     })
 }
+
+// Something went wrong updating value.
+export const updateValueFailure = (state, action) => {
+    const { error } = action
+    return state.merge({
+        updatingValue: false,
+        errorUpdatingValue: error,
+        actuator: state.actuator
+    })
+}
+
 // Something went wrong deleting.
 export const deleteFailure = (state, action) => {
     const { error } = action
     return state.merge({
         deleting: false,
         errorDeleting: error,
-        sensor: state.sensor
+        actuator: state.actuator
     })
 }
 // Something went wrong creating.
@@ -198,33 +198,31 @@ export const createFailure = (state, action) => {
     return state.merge({
         creating: false,
         errorCreating: error,
-        sensor: state.sensor
+        actuator: state.actuator
     })
 }
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-    [Types.SENSOR_REQUEST]: request,
-    [Types.SENSOR_ALL_REQUEST]: allRequest,
-    [Types.SENSOR_DATA_REQUEST]: dataRequest,
-    [Types.SENSOR_UPDATE_REQUEST]: updateRequest,
-    [Types.SENSOR_DELETE_REQUEST]: deleteRequest,
-    [Types.SENSOR_CREATE_REQUEST]: createRequest,
+    [Types.ACTUATOR_REQUEST]: request,
+    [Types.ACTUATOR_ALL_REQUEST]: allRequest,
+    [Types.ACTUATOR_UPDATE_REQUEST]: updateRequest,
+    [Types.ACTUATOR_UPDATE_VALUE_REQUEST]: updateValueRequest,
+    [Types.ACTUATOR_DELETE_REQUEST]: deleteRequest,
+    [Types.ACTUATOR_CREATE_REQUEST]: createRequest,
 
-    [Types.SENSOR_SUCCESS]: success,
-    [Types.SENSOR_ALL_SUCCESS]: allSuccess,
-    [Types.SENSOR_DATA_SUCCESS]: dataSuccess,
+    [Types.ACTUATOR_SUCCESS]: success,
+    [Types.ACTUATOR_ALL_SUCCESS]: allSuccess,
+    [Types.ACTUATOR_UPDATE_SUCCESS]: updateSuccess,
+    [Types.ACTUATOR_UPDATE_VALUE_SUCCESS]: updateValueSuccess,
+    [Types.ACTUATOR_DELETE_SUCCESS]: deleteSuccess,
+    [Types.ACTUATOR_CREATE_SUCCESS]: createSuccess,
 
-    [Types.SENSOR_UPDATE_SUCCESS]: updateSuccess,
-    [Types.SENSOR_DELETE_SUCCESS]: deleteSuccess,
-    [Types.SENSOR_CREATE_SUCCESS]: createSuccess,
-
-    [Types.SENSOR_FAILURE]: failure,
-    [Types.SENSOR_ALL_FAILURE]: allFailure,
-    [Types.SENSOR_DATA_FAILURE]: dataFailure,
-
-    [Types.SENSOR_UPDATE_FAILURE]: updateFailure,
-    [Types.SENSOR_DELETE_FAILURE]: deleteFailure,
-    [Types.SENSOR_CREATE_FAILURE]: createFailure
+    [Types.ACTUATOR_FAILURE]: failure,
+    [Types.ACTUATOR_ALL_FAILURE]: allFailure,
+    [Types.ACTUATOR_UPDATE_FAILURE]: updateFailure,
+    [Types.ACTUATOR_UPDATE_VALUE_FAILURE]: updateValueFailure,
+    [Types.ACTUATOR_DELETE_FAILURE]: deleteFailure,
+    [Types.ACTUATOR_CREATE_FAILURE]: createFailure
 })

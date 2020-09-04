@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
-import { Metrics, ApplicationStyles, Colors, Fonts } from '../../../shared/themes'
+import { Metrics, ApplicationStyles, Colors, Fonts } from '../../../shared/themes';
+import { sizeFont, sizeHeight, sizeWidth } from '../../../shared/components/size';
 
 export default StyleSheet.create({
     ...ApplicationStyles.screen,
@@ -96,5 +97,28 @@ export default StyleSheet.create({
         textAlign: 'center',
         marginTop: 12,
         ...Fonts.style.empty
-    }
+    },
+    container: {
+        flex: 1,
+        marginVertical: sizeWidth(2),
+        backgroundColor: Colors.snow,
+        flexDirection: 'row',
+        borderRadius: sizeWidth(2),
+        padding: sizeWidth(3),
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        shadowOffset: { width: 0, height: sizeWidth(0.1) },
+        shadowOpacity: 0.3,
+        elevation: 1,
+    },
+    list_item: {
+        textAlign: 'center',
+        marginTop: 12,
+        color: Colors.panther,
+        ...Fonts.style.list_element
+    },
+    transfers: {
+        marginVertical: sizeWidth(1),
+        paddingHorizontal: sizeWidth(1),
+    },
 })

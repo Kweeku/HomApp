@@ -12,6 +12,7 @@ import { Images, Metrics } from '../../shared/themes'
 import Toast from 'react-native-simple-toast';
 import { LAUNCH_SCREEN } from '../../navigation/layouts'
 import Colors from '../../shared/themes/colors'
+import * as Keychain from 'react-native-keychain';
 
 class LoginScreen extends React.Component {
   static propTypes = {
@@ -56,7 +57,7 @@ class LoginScreen extends React.Component {
             },
             topBar: {
               title: {
-                text: 'Welcome!',
+                text: 'Welcome Back!',
                 color: Colors.snow,
                 fontFamily: 'Staatliches-Regular',
                 fontSize: 24
@@ -79,6 +80,15 @@ class LoginScreen extends React.Component {
       });
     }
   }
+
+  storePassword = async () => {
+    const username = this.state.username;
+    const password = this.state.password;
+
+    // Store the credentials
+    console.tron.log('Storing credentials');
+    await Keychain.setGenericPassword(username, password);
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let nextLoading = nextProps.fetching;
@@ -103,9 +113,11 @@ class LoginScreen extends React.Component {
       if (prevProps.fetching && this.props.error) {
         Alert.alert('Error', this.props.error, [{ text: 'OK' }])
       }
+    } else {
+      this.storePassword();
+      this.isUserLoggedIn();
     }
-    
-    this.isUserLoggedIn();
+
   }
 
   handlePressLogin = () => {

@@ -31,9 +31,9 @@ export function* getSensors(api, action) {
 }
 
 export function* getSensorData(api, action) {
-    const { deviceId, sensorId } = action
+    const { options } = action
     // make the call to the api
-    const apiCall = call(api.getSensorData, deviceId, sensorId)
+    const apiCall = call(api.getSensorData, options)
     const response = yield call(callApi, apiCall)
 
     // success?

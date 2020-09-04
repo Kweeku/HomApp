@@ -1,4 +1,4 @@
-package com.homa;
+package com.waziup.homa;
 
 import com.reactnativenavigation.NavigationActivity;
 

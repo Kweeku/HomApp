@@ -100,14 +100,14 @@ class TabRouter extends React.Component {
               if (route.name === 'Appliances') {
                 iconName = 'devices';
                 color = focused ? Colors.bronze : Colors.darkAsh
-              } else if (route.name === 'Lights') {
-                iconName = 'home-lightbulb';
+              } else if (route.name === 'Home') {
+                iconName = 'home-city';
                 color = focused ? Colors.bronze : Colors.darkAsh
               } else if (route.name === 'Sockets') {
                 iconName = 'power-socket-uk';
                 color = focused ? Colors.bronze : Colors.darkAsh
               } else if (route.name === 'Statistics') {
-                iconName = 'chart-bar-stacked';
+                iconName = 'home-analytics';
                 color = focused ? Colors.bronze : Colors.darkAsh
               }
 
@@ -142,9 +142,7 @@ class TabRouter extends React.Component {
             activeTintColor: Colors.snow,
           }}
         >
-          <Tab.Screen name="Appliances" component={ApplianceScreen} />
-          <Tab.Screen name="Lights" component={LightScreen} />
-          <Tab.Screen name="Sockets" component={SocketScreen} />
+          <Tab.Screen name="Home" component={LightScreen} />
           <Tab.Screen name="Statistics" component={StatisticScreen} />
         </Tab.Navigator>
       </NavigationContainer >
