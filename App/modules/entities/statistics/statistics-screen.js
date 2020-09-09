@@ -14,6 +14,7 @@ import styles from './statistics-screen.styles'
 import Spinner from 'react-native-loading-spinner-overlay'
 import * as Keychain from 'react-native-keychain';
 import BackgroundTimer from 'react-native-background-timer';
+import moment from "moment";
 
 let credentials = null;
 
@@ -26,26 +27,20 @@ class StatisticScreen extends Component {
             fetchingDevices: false,
             devices: null,
             sensor1: null,
-            sensor2: null,
-            sensor3: null,
-            sensor4: null,
+            tempValues: null,
+            tempTimestamp: null,
+            date: null,
             loading: false,
             activeSections: [],
             sensors: [],
             sort: 'asc',
-            limit: 20,
+            limit: 10,
         }
         this.fetchAll();
     }
 
     fetchAll() {
         this.props.getDevices();
-        if (this.state.sensors.length > 0) {
-            const { sort, limit } = this.state;
-            const sensor1 = this.state.sensors.filter(element => element.id === "GS").shift();
-            this.props.getSensorData({ device_id: sensor1.deviceId, sensor_id: sensor1.id, sort: sort, calibrated: true, limit: limit })
-            // console.tron.log(sensor1)
-        }
     }
 
     retriveCredentials = async () => {
@@ -99,7 +94,7 @@ class StatisticScreen extends Component {
         this.authIntervalCall();
     }
 
-    componentDidUpdate(prevState, prevProps) {
+    async componentDidUpdate(prevState, prevProps) {
 
         if (this.props.devices && !prevProps.devices) {
             this.setState({
@@ -125,61 +120,33 @@ class StatisticScreen extends Component {
 
             if (this.state.sensors.length > 0) {
                 const { sort, limit } = this.state;
-                const sensor1 = this.state.sensors.filter(element => element.id === "GS").shift();
+                const sensor1 = this.state.sensors.filter(element => element.id === "TC").shift();
                 this.props.getSensorData({ device_id: sensor1.deviceId, sensor_id: sensor1.id, sort: sort, calibrated: true, limit: limit })
                 // console.tron.log(sensor1)
-            }
 
-            if (this.props.sensorData && !prevProps.sensorData) {
+                const tempData = await this.props.sensorData;
+                const timestamp = [];
+                const values = [];
+                const date = [];
+                tempData.forEach(element => {
+                    values.push(element.value);
+                    timestamp.push(moment(element.timestamp).format('h:mm'));
+                    date.push(moment(element.timestamp).format('DD MM YY'));
+                });
                 this.setState({
-                    sensor1: this.props.sensorData
+                    sensor1: tempData,
+                    tempValues: values,
+                    tempTimestamp: timestamp,
+                    date: date[0],
                 })
-                console.tron.log(this.state.sensor1)
-                if (this.state.sensor1 !== null) {
-                    const { sort, limit } = this.state;
-                    const sensor2 = this.state.sensors.filter(element => element.id === "TC").shift();
-                    this.props.getSensorData({ device_id: sensor2.deviceId, sensor_id: sensor2.id, sort: sort, calibrated: true, limit: limit })
-                    // console.tron.log(sensor2)
-                }
-            }
 
-            if (this.state.sensor1 !== null) {
-                this.setState({
-                    sensor2: this.props.sensorData
-                })
-                console.tron.log(this.state.sensor2)
-                if (this.state.sensor2 !== null) {
-                    const { sort, limit } = this.state;
-                    const sensor3 = this.state.sensors.filter(element => element.id === "HU").shift();
-                    this.props.getSensorData({ device_id: sensor3.deviceId, sensor_id: sensor3.id, sort: sort, calibrated: true, limit: limit })
-                    // console.tron.log(sensor3)
-                }
+                console.tron.log(this.state.sensor1, this.state.tempValues, this.state.tempTimestamp)
             }
-
-            if (this.state.sensor2 !== null) {
-                this.setState({
-                    sensor3: this.props.sensorData
-                })
-                console.tron.log(this.state.sensor3)
-                if (this.state.sensor3 !== null) {
-                    const { sort, limit } = this.state;
-                    const sensor4 = this.state.sensors.filter(element => element.id === "HI").shift();
-                    this.props.getSensorData({ device_id: sensor4.deviceId, sensor_id: sensor4.id, sort: sort, calibrated: true, limit: limit })
-                    // console.tron.log(sensor4)
-                }
-            }
-            if (this.state.sensor3 !== null) {
-                this.setState({
-                    sensor4: this.props.sensorData
-                })
-                console.tron.log(this.state.sensor4)
-            }
-
         }
     }
 
     render() {
-        const { devices, sort, limit } = this.state;
+        const { devices, sort, limit, tempValues, tempTimestamp, date } = this.state;
         const dev = devices ? devices[1] : [];
         const dev2 = devices ? devices[0] : [];
 
@@ -213,7 +180,7 @@ class StatisticScreen extends Component {
                             </View>
                         }
                         {devices !== null &&
-                            <RoomTwo devices={devices} />
+                            <RoomTwo devices={devices} tempTimestamp={tempTimestamp} tempValues={tempValues} date={date} />
                         }
                     </View>
                     <Button title='Fetch Sensor Data' onPress={() => this.props.getSensorData(

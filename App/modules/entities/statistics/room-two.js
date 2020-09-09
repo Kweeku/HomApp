@@ -15,6 +15,7 @@ import styles from './statistics-screen.styles'
 export default class RoomTwo extends Component {
     static propTypes = {
         devices: PropTypes.any,
+        gasSensor: PropTypes.any
     };
 
     renderMotionDetected = () => {
@@ -33,8 +34,16 @@ export default class RoomTwo extends Component {
         )
     }
 
+    renderGasReading = (gasVal) => {
+        return (
+            <View style={styles.motion_not_detected}>
+                <Text style={styles.welcomeText}>Gas Level: {gasVal.value.value}</Text>
+            </View>
+        )
+    }
+
     render() {
-        const { devices } = this.props;
+        const { devices, gasSensor } = this.props;
         const dev2 = devices ? devices[1] : [];
         const humVal = dev2 ? dev2.sensors[1] : [];
         const gasVal = dev2 ? dev2.sensors[0] : [];
@@ -45,20 +54,20 @@ export default class RoomTwo extends Component {
             data: [humVal.value.value / 100, tempVal.value.value / 100],
         }
         const data = {
-            labels: ["January", "February", "March", "April", "May", "June"],
+            labels: this.props.tempTimestamp,
             datasets: [
                 {
-                    data: [20, 45, 28, 80, 99, 43],
+                    data: this.props.tempValues,
                     color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
                     strokeWidth: 2 // optional
                 },
-                {
-                    data: [30, 65, 48, 120, 199, 73],
-                    color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-                    strokeWidth: 2 // optional
-                }
+                // {
+                //     data: [30, 65, 48, 120, 199, 73],
+                //     color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+                //     strokeWidth: 2 // optional
+                // }
             ],
-            legend: ["DHT Sensor Readings"] // optional
+            legend: [`Temperature Readings for ${this.props.date}`] // optional
         };
         const gasData = {
             labels: ["January", "February", "March", "April", "May", "June"],
@@ -94,7 +103,7 @@ export default class RoomTwo extends Component {
                 <View style={{ padding: 15, flex: 1, borderRadius: 15 }}>
                     <ProgressChart
                         data={progressTemp}
-                        width={Dimensions.get('screen').width-35}
+                        width={Dimensions.get('screen').width - 35}
                         height={220}
                         strokeWidth={16}
                         radius={32}
@@ -109,20 +118,22 @@ export default class RoomTwo extends Component {
                         hasLegend={true}
                     />
                 </View>
-                <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
-                    <LineChart
-                        data={data}
-                        width={Dimensions.get('screen').width - 35}
-                        height={220}
-                        chartConfig={chartConfig}
-                        style={{
-                            borderRadius: 15,
-                            elevation: 2,
-                            padding: 3
-                        }}
-                    />
-                </View>
-                <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
+                {this.props.tempValues !== null &&
+                    <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
+                        <LineChart
+                            data={data}
+                            width={Dimensions.get('screen').width - 35}
+                            height={220}
+                            chartConfig={chartConfig}
+                            style={{
+                                borderRadius: 15,
+                                elevation: 2,
+                                padding: 3
+                            }}
+                        />
+                    </View>
+                }
+                {/* <View style={{ padding: 15, flex: 1, borderRadius: 15 }} >
                     <LineChart
                         data={gasData}
                         width={Dimensions.get('screen').width - 35}
@@ -135,9 +146,10 @@ export default class RoomTwo extends Component {
                         }}
                         bezier
                     />
-                </View>
+                </View> */}
+                {this.renderGasReading(gasVal)}
                 {motionVal.value.value === 1 ? this.renderMotionDetected() : this.renderNoMotionDetected()}
-            </ScrollView>
+            </ScrollView >
         )
     }
 }

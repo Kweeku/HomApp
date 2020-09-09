@@ -53,11 +53,9 @@ class ItemActuator extends Component {
 
     onPressToggle = () => {
         const { data } = this.props;
-        this.setState({ value: !this.state.value },
-            () => {
-
-            });
+        this.setState({ value: !this.state.value });
         const updateVals = [data.deviceId, data.id, data.name, data.actuator_kind, data.actuator_value_type, this.state.value]
+        this.props.updateActuatorValue(data.deviceId, data.id, this.state.value)
         console.tron.log(updateVals);
     }
 
