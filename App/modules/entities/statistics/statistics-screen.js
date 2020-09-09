@@ -183,10 +183,10 @@ class StatisticScreen extends Component {
                             <RoomTwo devices={devices} tempTimestamp={tempTimestamp} tempValues={tempValues} date={date} />
                         }
                     </View>
-                    <Button title='Fetch Sensor Data' onPress={() => this.props.getSensorData(
+                    {/* <Button title='Fetch Sensor Data' onPress={() => this.props.getSensorData(
                         { device_id: 'b827eb500178_3', sensor_id: 'TC', sort: sort, calibrated: true, limit: limit }
                     )} />
-                    <Button title='Fetch Sensors' onPress={() => this.props.getAllSensors(dev.id)} />
+                    <Button title='Fetch Sensors' onPress={() => this.props.getAllSensors(dev.id)} /> */}
                 </ScrollView>
             </View>
         )
