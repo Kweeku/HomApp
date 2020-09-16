@@ -172,12 +172,6 @@ class StatisticScreen extends Component {
             sensor1,
             sensors
         } = this.state;
-        const dev = devices ? devices[1] : [];
-        const dev2 = devices ? devices[0] : [];
-        const valuePost = {
-            value: 43,
-            timestamp: new Date()
-        };
 
         return (
             <View style={styles.mainContainer} testID="statisticScreen">
