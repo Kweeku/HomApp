@@ -7,8 +7,10 @@ import styles from './lights-screen.styles';
 import { Metrics, ApplicationStyles, Colors, Fonts } from '../../../shared/themes';
 import ActuatorActions from './actuator.reducer'
 import DeviceActions from '../../account/device/device.reducer'
+import SensorActions from '../statistics/sensor.reducer'
 import LoginActions from '../../login/login.reducer';
 import * as Keychain from 'react-native-keychain';
+import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons"
 
 let credentials = null;
 
@@ -51,11 +53,16 @@ class ItemActuator extends Component {
         setInterval(this.getAuth, 3000)
     }
 
-    onPressToggle = () => {
+    onPressToggle = async () => {
         const { data } = this.props;
-        this.setState({ value: !this.state.value });
+        this.setState({ value: this.state.value === 1 ? 0 : 1 });
         const updateVals = [data.deviceId, data.id, data.name, data.actuator_kind, data.actuator_value_type, this.state.value]
-        this.props.updateActuatorValue(data.deviceId, data.id, this.state.value)
+        const valuePost = {
+            value: this.state.value === 1 ? 0 : 1,
+            timestamp: new Date()
+        }
+        this.props.sensorUpdateValue(data.deviceId, data.id, valuePost)
+        this.props.getDevices();
         console.tron.log(updateVals);
     }
 
@@ -65,8 +72,11 @@ class ItemActuator extends Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.list_item} >{data.name}</Text>
-                <Icon name={value === true ? 'toggle-on' : 'toggle-off'} size={25} color={Colors.bloodOrange} onPress={() => this.onPressToggle()} />
+                <View style={{ flexDirection: 'row' }}>
+                    <MaterialIcon name={'light-switch'} size={25} color={Colors.bloodOrange} />
+                    <Text style={styles.list_item} >{data.name}</Text>
+                </View>
+                <Icon name={value === 1 ? 'toggle-on' : 'toggle-off'} size={25} color={Colors.bloodOrange} onPress={() => this.onPressToggle()} />
             </View>
         )
     }
@@ -87,6 +97,7 @@ const mapDispatchToProps = (dispatch) => {
         // for developer convenience
         getAllActuators: (deviceId) => dispatch(ActuatorActions.actuatorAllRequest(deviceId)),
         updateActuatorValue: (deviceId, actuatorId, value) => dispatch(ActuatorActions.actuatorUpdateValueRequest(deviceId, actuatorId, value)),
+        sensorUpdateValue: (deviceId, sensorId, value) => dispatch(SensorActions.sensorUpdateValueRequest(deviceId, sensorId, value)),
         getDevices: () => dispatch(DeviceActions.deviceAllRequest()),
         attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password)),
     }

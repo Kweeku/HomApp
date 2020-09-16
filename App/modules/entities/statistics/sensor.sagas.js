@@ -59,6 +59,20 @@ export function* updateSensor(api, action) {
     }
 }
 
+export function* updateSensorValue(api, action) {
+    const { deviceId, sensorId, value } = action
+    // make the call to the api
+    const apiCall = call(api.updateSensorValue, deviceId, sensorId, value)
+    const response = yield call(callApi, apiCall)
+
+    // success?
+    if (response.ok) {
+        yield put(SensorActions.sensorUpdateValueSuccess(response.data))
+    } else {
+        yield put(SensorActions.sensorUpdateValueFailure(response.data))
+    }
+}
+
 export function* deleteSensor(api, action) {
     const { deviceId, sensorId } = action
     // make the call to the api

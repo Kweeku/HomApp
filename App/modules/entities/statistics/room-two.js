@@ -43,15 +43,9 @@ export default class RoomTwo extends Component {
     }
 
     render() {
-        const { devices, gasSensor } = this.props;
-        const dev2 = devices ? devices[1] : [];
-        const humVal = dev2 ? dev2.sensors[1] : [];
-        const gasVal = dev2 ? dev2.sensors[0] : [];
-        const tempVal = dev2 ? dev2.sensors[3] : [];
-        const motionVal = dev2 ? dev2.sensors[2] : [];
         const progressTemp = {
             labels: ['Hum', 'Temp'],
-            data: [humVal.value.value / 100, tempVal.value.value / 100],
+            data: [this.props.humVal.value.value / 100, this.props.tempVal.value.value / 100],
         }
         const data = {
             labels: this.props.tempTimestamp,
@@ -147,8 +141,8 @@ export default class RoomTwo extends Component {
                         bezier
                     />
                 </View> */}
-                {this.renderGasReading(gasVal)}
-                {motionVal.value.value === 1 ? this.renderMotionDetected() : this.renderNoMotionDetected()}
+                {this.renderGasReading(this.props.gasVal)}
+                {this.props.motionVal.value.value === 1 ? this.renderMotionDetected() : this.renderNoMotionDetected()}
             </ScrollView >
         )
     }

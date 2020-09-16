@@ -9,12 +9,14 @@ const { Types, Creators } = createActions({
     sensorDataRequest: ['options'],
     sensorCreateRequest: ['deviceId', 'sensorId'],
     sensorUpdateRequest: ['deviceId','sensor'],
+    sensorUpdateValueRequest: ['deviceId', 'sensorId', 'value'],
     sensorDeleteRequest: ['deviceId','sensorId'],
 
     sensorSuccess: ['sensor'],
     sensorAllSuccess: ['sensors'],
     sensorDataSuccess: ['sensorData'],
     sensorUpdateSuccess: ['sensor'],
+    sensorUpdateValueSuccess: [],
     sensorDeleteSuccess: [],
     sensorCreateSuccess: [],
 
@@ -22,6 +24,7 @@ const { Types, Creators } = createActions({
     sensorAllFailure: ['error'],
     sensorDataFailure: ['error'],
     sensorUpdateFailure: ['error'],
+    sensorUpdateValueFailure: ['error'],
     sensorDeleteFailure: ['error'],
     sensorCreateFailure: ['error']
 })
@@ -36,6 +39,7 @@ export const INITIAL_STATE = Immutable({
     fetchingAll: null,
     fetchingData: null,
     updating: null,
+    updatingValue: null,
     deleting: null,
     creating: null,
     sensor: null,
@@ -44,6 +48,7 @@ export const INITIAL_STATE = Immutable({
     errorOne: null,
     errorAll: null,
     errorUpdating: null,
+    errorUpdatingValue: null,
     errorDeleting: null,
     errorData: null,
     errorCreating: null
@@ -76,6 +81,11 @@ export const dataRequest = (state) =>
 export const updateRequest = (state) =>
     state.merge({
         updating: true
+    })
+// request to update value from an api
+export const updateValueRequest = (state) =>
+    state.merge({
+        updatingValue: true
     })
 // request to delete from an api
 export const deleteRequest = (state) =>
@@ -125,6 +135,14 @@ export const updateSuccess = (state, action) => {
         updating: false,
         errorUpdating: null,
         sensor
+    })
+}
+// successful api value update
+export const updateValueSuccess = (state) => {
+    return state.merge({
+        updatingValue: false,
+        errorUpdatingValue: null,
+        sensor: null
     })
 }
 // successful api delete
@@ -183,6 +201,15 @@ export const updateFailure = (state, action) => {
         sensor: state.sensor
     })
 }
+// Something went wrong updating value.
+export const updateValueFailure = (state, action) => {
+    const { error } = action
+    return state.merge({
+        updatingValue: false,
+        errorUpdatingValue: error,
+        sensor: state.sensor
+    })
+}
 // Something went wrong deleting.
 export const deleteFailure = (state, action) => {
     const { error } = action
@@ -209,22 +236,23 @@ export const reducer = createReducer(INITIAL_STATE, {
     [Types.SENSOR_ALL_REQUEST]: allRequest,
     [Types.SENSOR_DATA_REQUEST]: dataRequest,
     [Types.SENSOR_UPDATE_REQUEST]: updateRequest,
+    [Types.SENSOR_UPDATE_VALUE_REQUEST]: updateValueRequest,
     [Types.SENSOR_DELETE_REQUEST]: deleteRequest,
     [Types.SENSOR_CREATE_REQUEST]: createRequest,
 
     [Types.SENSOR_SUCCESS]: success,
     [Types.SENSOR_ALL_SUCCESS]: allSuccess,
     [Types.SENSOR_DATA_SUCCESS]: dataSuccess,
-
     [Types.SENSOR_UPDATE_SUCCESS]: updateSuccess,
+    [Types.SENSOR_UPDATE_VALUE_SUCCESS]: updateValueSuccess,
     [Types.SENSOR_DELETE_SUCCESS]: deleteSuccess,
     [Types.SENSOR_CREATE_SUCCESS]: createSuccess,
 
     [Types.SENSOR_FAILURE]: failure,
     [Types.SENSOR_ALL_FAILURE]: allFailure,
     [Types.SENSOR_DATA_FAILURE]: dataFailure,
-
     [Types.SENSOR_UPDATE_FAILURE]: updateFailure,
+    [Types.SENSOR_UPDATE_VALUE_FAILURE]: updateValueFailure,
     [Types.SENSOR_DELETE_FAILURE]: deleteFailure,
     [Types.SENSOR_CREATE_FAILURE]: createFailure
 })
