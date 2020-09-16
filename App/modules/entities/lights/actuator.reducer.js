@@ -14,7 +14,7 @@ const { Types, Creators } = createActions({
     actuatorSuccess: ['actuator'],
     actuatorAllSuccess: ['actuators'],
     actuatorUpdateSuccess: ['actuator'],
-    actuatorUpdateValueSuccess: ['actuator'],
+    actuatorUpdateValueSuccess: [],
     actuatorDeleteSuccess: [],
     actuatorCreateSuccess: [],
 
@@ -117,12 +117,11 @@ export const updateSuccess = (state, action) => {
 }
 
 // successful api value update
-export const updateValueSuccess = (state, action) => {
-    const { actuator } = action
+export const updateValueSuccess = (state) => {
     return state.merge({
         updatingValue: false,
         errorUpdatingValue: null,
-        actuator
+        actuator: null
     })
 }
 

@@ -30,6 +30,10 @@ class StatisticScreen extends Component {
             tempValues: null,
             tempTimestamp: null,
             date: null,
+            humVal: null,
+            tempVal: null,
+            gasVal: null,
+            motionVal: null,
             loading: false,
             activeSections: [],
             sensors: [],
@@ -138,17 +142,42 @@ class StatisticScreen extends Component {
                     tempValues: values,
                     tempTimestamp: timestamp,
                     date: date[0],
+                    tempVal: this.state.sensors.filter(element => element.id === "TC").shift(),
+                    humVal: this.state.sensors.filter(element => element.id === "HU").shift(),
+                    motionVal: this.state.sensors.filter(element => element.id === "MT").shift(),
+                    gasVal: this.state.sensors.filter(element => element.id === "GS").shift(),
                 })
 
                 console.tron.log(this.state.sensor1, this.state.tempValues, this.state.tempTimestamp)
+                console.tron.log(this.state.tempVal)
+                console.tron.log(this.state.humVal)
+                console.tron.log(this.state.motionVal)
+                console.tron.log(this.state.gasVal)
             }
         }
     }
 
     render() {
-        const { devices, sort, limit, tempValues, tempTimestamp, date } = this.state;
+        const {
+            devices,
+            sort,
+            limit,
+            tempValues,
+            tempTimestamp,
+            date,
+            tempVal,
+            motionVal,
+            gasVal,
+            humVal,
+            sensor1,
+            sensors
+        } = this.state;
         const dev = devices ? devices[1] : [];
         const dev2 = devices ? devices[0] : [];
+        const valuePost = {
+            value: 43,
+            timestamp: new Date()
+        };
 
         return (
             <View style={styles.mainContainer} testID="statisticScreen">
@@ -179,14 +208,19 @@ class StatisticScreen extends Component {
                                 <Text style={styles.empty_list}>Sorry, there's no data available at this moment.</Text>
                             </View>
                         }
-                        {devices !== null &&
-                            <RoomTwo devices={devices} tempTimestamp={tempTimestamp} tempValues={tempValues} date={date} />
+                        {(devices !== null && humVal !== null) &&
+                            <RoomTwo
+                                devices={devices}
+                                tempTimestamp={tempTimestamp}
+                                tempValues={tempValues}
+                                date={date}
+                                tempVal={tempVal}
+                                humVal={humVal}
+                                gasVal={gasVal}
+                                motionVal={motionVal}
+                            />
                         }
                     </View>
-                    {/* <Button title='Fetch Sensor Data' onPress={() => this.props.getSensorData(
-                        { device_id: 'b827eb500178_3', sensor_id: 'TC', sort: sort, calibrated: true, limit: limit }
-                    )} />
-                    <Button title='Fetch Sensors' onPress={() => this.props.getAllSensors(dev.id)} /> */}
                 </ScrollView>
             </View>
         )
@@ -208,6 +242,7 @@ const mapDispatchToProps = (dispatch) => {
         // for developer convenience
         getAllSensors: (deviceId) => dispatch(SensorActions.sensorAllRequest(deviceId)),
         getSensorData: (deviceId, sensorId) => dispatch(SensorActions.sensorDataRequest(deviceId, sensorId)),
+        sensorUpdateValue: (deviceId, sensorId, value) => dispatch(SensorActions.sensorUpdateValueRequest(deviceId, sensorId, value)),
         getDevices: () => dispatch(DeviceActions.deviceAllRequest()),
         attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password)),
     }

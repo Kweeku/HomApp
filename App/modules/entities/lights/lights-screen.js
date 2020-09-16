@@ -36,10 +36,10 @@ class LightScreen extends React.Component {
             this.setState({
                 devices: this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com'),
                 actuators: this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com').forEach(element => {
-                    if (element.actuators.length > 0) {
+                    if (element.sensors.length > 0) {
                         const actuatorName = element.name;
                         const actuatorId = element.id
-                        element.actuators.forEach(element => {
+                        element.sensors.filter(sensor => sensor.sensor_kind ==="OtherDevice").forEach(element => {
                             const actuator = {};
                             Object.assign(actuator, element);
                             actuator.deviceName = actuatorName;
@@ -106,6 +106,9 @@ class LightScreen extends React.Component {
                     <View style={styles.centered}>
                         {/* <Image source={Images.logoJhipster} style={styles.logo} />
                         <Text style={styles.welcomeText}>{'Welcome to your Ignite JHipster app.'}</Text> */}
+                    </View>
+                    <View style={styles.centered}>
+                        <Text style={styles.title}>SWITCHES</Text>
                     </View>
                     <View style={styles.hairline} />
                     {/* <Header /> */}

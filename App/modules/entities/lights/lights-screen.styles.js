@@ -113,7 +113,7 @@ export default StyleSheet.create({
     },
     list_item: {
         textAlign: 'center',
-        marginTop: 12,
+        marginLeft: 15,
         color: Colors.panther,
         ...Fonts.style.list_element
     },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
+import { Alert, ScrollView, Text, TouchableHighlight, View } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import t from 'tcomb-form-native'
@@ -84,22 +84,22 @@ class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView>
-        <ScrollView style={styles.container}>
-          <Form
-            ref={(c) => {
-              this.form = c
-            }}
-            type={this.state.accountModel}
-            options={this.state.options}
-            value={this.state.accountValue}
-            onChange={this.accountChange}
-          />
-          <TouchableHighlight testID="settingsSubmitButton" style={styles.button} onPress={this.submitUpdate} underlayColor="#99d9f4">
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
+      <View style={styles.mainContainer} testID="applianceScreen">
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
+          <View style={styles.centered}>
+            <View style={styles.centered}>
+              <Text style={styles.title}>OPTIMIZATION SETTINGS</Text>
+            </View>
+            {/* <Image source={Images.logoJhipster} style={styles.logo} />
+                        <Text style={styles.welcomeText}>{'Welcome to your Ignite JHipster app.'}</Text> */}
+          </View>
+          <View style={styles.hairline} />
+          {/* <Header /> */}
+          <View style={styles.body}>
+            <Text style={styles.empty_list}>Sorry, this feature is unable as it is still in development...</Text>
+          </View>
         </ScrollView>
-      </KeyboardAwareScrollView>
+      </View>
     )
   }
 }

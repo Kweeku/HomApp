@@ -26,7 +26,7 @@ import { forgotPassword } from '../../modules/account/password-reset/forgot-pass
 import { changePassword } from '../../modules/account/password/change-password.sagas'
 import { getAccount, updateAccount } from '../../shared/sagas/account.sagas'
 import { getUser, getUsers, updateUser, deleteUser } from '../../shared/sagas/user.sagas'
-import { getSensor, getSensorData, getSensors, updateSensor, deleteSensor, createSensor } from '../../modules/entities/statistics/sensor.sagas'
+import { getSensor, getSensorData, getSensors, updateSensor, deleteSensor, createSensor, updateSensorValue } from '../../modules/entities/statistics/sensor.sagas'
 import { getActuator, getActuators, updateActuator, deleteActuator, createActuator, updateActuatorValue } from '../../modules/entities/lights/actuator.sagas'
 import { getDevice, getDevices, updateDevice, deleteDevice, createDevice } from '../../modules/account/device/device.sagas'
 
@@ -62,6 +62,7 @@ export default function* root() {
     takeLatest(SensorTypes.SENSOR_ALL_REQUEST, getSensors, api),
     takeLatest(SensorTypes.SENSOR_DATA_REQUEST, getSensorData, api),
     takeLatest(SensorTypes.SENSOR_UPDATE_REQUEST, updateSensor, api),
+    takeLatest(SensorTypes.SENSOR_UPDATE_VALUE_REQUEST, updateSensorValue, api),
     takeLatest(SensorTypes.SENSOR_DELETE_REQUEST, deleteSensor, api),
     takeLatest(SensorTypes.SENSOR_CREATE_REQUEST, createSensor, api),
 
