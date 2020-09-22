@@ -202,7 +202,7 @@ class StatisticScreen extends Component {
                                 <Text style={styles.empty_list}>Sorry, there's no data available at this moment.</Text>
                             </View>
                         }
-                        {(devices !== null && humVal !== null) &&
+                        {tempValues !== null &&
                             <RoomTwo
                                 devices={devices}
                                 tempTimestamp={tempTimestamp}
