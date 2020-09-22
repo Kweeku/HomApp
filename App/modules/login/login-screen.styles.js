@@ -5,18 +5,23 @@ import { Colors, Metrics } from '../../shared/themes'
 export default StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
+    alignItems: 'center',
     flex: 1
   },
   container: {
     backgroundColor: Colors.darkAsh,
-    paddingTop: 30
+    paddingTop: 30,
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   form: {
     backgroundColor: Colors.snow,
     margin: Metrics.baseMargin,
     borderRadius: 4,
     elevation: 3,
-    top: 10
+    top: 10,
+    width: Metrics.screenWidth-40
   },
   row: {
     paddingVertical: Metrics.doubleBaseMargin,
@@ -54,12 +59,16 @@ export default StyleSheet.create({
   topLogo: {
     alignSelf: 'center',
     resizeMode: 'contain',
+    marginBottom: 20,
+    padding: 10,
+    marginTop: 20
   },
   noAccount: {
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 70,
+    position: 'relative',
+    bottom: 0,
     alignSelf: 'center',
+    marginTop: 35
   },
   noAccountUnderline:{
     color: Colors.jhipsterBlue,

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Image, View, ScrollView, Text, TextInput, TouchableOpacity, Linking, BackHandler } from 'react-native'
+import { Alert, View, Keyboard, Text, TextInput, TouchableOpacity, Linking, BackHandler, KeyboardAvoidingView, Animated, Platform } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
 
@@ -13,6 +13,7 @@ import Toast from 'react-native-simple-toast';
 import { LAUNCH_SCREEN } from '../../navigation/layouts'
 import Colors from '../../shared/themes/colors'
 import * as Keychain from 'react-native-keychain';
+import { IMAGE_HEIGHT, IMAGE_HEIGHT_SMALL } from '../../shared/themes/metrics'
 
 class LoginScreen extends React.Component {
   static propTypes = {
@@ -35,6 +36,20 @@ class LoginScreen extends React.Component {
       },
       requesting: false
     }
+
+    this.imageHeight = new Animated.Value(IMAGE_HEIGHT);
+    this.keyboardAssisted();
+  }
+
+  keyboardAssisted() {
+    if (Platform.OS == 'ios') {
+      this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+      this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    } else {
+      this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+      this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+
   }
 
   backHandler = () => {
@@ -145,71 +160,109 @@ class LoginScreen extends React.Component {
     this.setState({ password: text })
   }
 
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  }
+
+  keyboardWillShow = (event) => {
+    Animated.timing(this.imageHeight, {
+      duration: event.duration,
+      toValue: IMAGE_HEIGHT_SMALL,
+      useNativeDriver: false
+    }).start();
+  };
+
+  keyboardWillHide = (event) => {
+    Animated.timing(this.imageHeight, {
+      duration: event.duration,
+      toValue: IMAGE_HEIGHT,
+      useNativeDriver: false
+    }).start();
+  };
+
+  keyboardDidShow = (event) => {
+    Animated.timing(this.imageHeight, {
+      toValue: IMAGE_HEIGHT_SMALL,
+      useNativeDriver: false
+    }).start();
+  };
+
+  keyboardDidHide = (event) => {
+    Animated.timing(this.imageHeight, {
+      toValue: IMAGE_HEIGHT,
+      useNativeDriver: false
+    }).start();
+  };
+
   render() {
     const { username, password } = this.state
     const textInputStyle = styles.textInput
     return (
       <View
-        contentContainerStyle={styles.contentContainer}
-        style={[styles.container, { height: this.state.visibleHeight }]}
+        style={{ flex: 1, backgroundColor: Colors.darkAsh, alignItems: 'center' }}
         keyboardShouldPersistTaps="always">
-        <Image source={Images.logoLogin} style={[styles.topLogo, this.state.topLogo]} />
-        <View style={styles.form}>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Username</Text>
-            <TextInput
-              ref={(c) => {
-                this.usernameInput = c
-              }}
-              testID="loginScreenUsername"
-              style={textInputStyle}
-              value={username}
-              keyboardType="default"
-              returnKeyType="next"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={this.handleChangeUsername}
-              underlineColorAndroid="transparent"
-              onSubmitEditing={() => this.passwordInput.focus()}
-              placeholder="Username"
-            />
-          </View>
+        <Animated.Image source={Images.logoLogin} style={[styles.topLogo, { height: this.imageHeight }]} />
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior='padding'>
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Username</Text>
+              <TextInput
+                ref={(c) => {
+                  this.usernameInput = c
+                }}
+                testID="loginScreenUsername"
+                style={textInputStyle}
+                value={username}
+                keyboardType="default"
+                returnKeyType="next"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={this.handleChangeUsername}
+                underlineColorAndroid="transparent"
+                onSubmitEditing={() => this.passwordInput.focus()}
+                placeholder="Username"
+              />
+            </View>
 
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Password</Text>
-            <TextInput
-              ref={(c) => {
-                this.passwordInput = c
-              }}
-              testID="loginScreenPassword"
-              style={textInputStyle}
-              value={password}
-              keyboardType="default"
-              returnKeyType="go"
-              autoCapitalize="none"
-              autoCorrect={false}
-              secureTextEntry
-              onChangeText={this.handleChangePassword}
-              underlineColorAndroid="transparent"
-              onSubmitEditing={this.handlePressLogin}
-              placeholder="Password"
-            />
-          </View>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Password</Text>
+              <TextInput
+                ref={(c) => {
+                  this.passwordInput = c
+                }}
+                testID="loginScreenPassword"
+                style={textInputStyle}
+                value={password}
+                keyboardType="default"
+                returnKeyType="go"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry
+                onChangeText={this.handleChangePassword}
+                underlineColorAndroid="transparent"
+                onSubmitEditing={this.handlePressLogin}
+                placeholder="Password"
+              />
+            </View>
 
-          <View style={[styles.loginRow]}>
-            <TouchableOpacity testID="loginScreenLoginButton" style={styles.loginButtonWrapper} onPress={this.handlePressLogin}>
-              <View style={styles.loginButton}>
-                <Text style={styles.loginText}>Sign In</Text>
-              </View>
+            <View style={[styles.loginRow]}>
+              <TouchableOpacity testID="loginScreenLoginButton" style={styles.loginButtonWrapper} onPress={this.handlePressLogin}>
+                <View style={styles.loginButton}>
+                  <Text style={styles.loginText}>Sign In</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.noAccount}>
+            <Text style={styles.noAccountText}>Don't have an account? </Text>
+            <TouchableOpacity onPress={() => Linking.openURL('https://dashboard.waziup.io/')} testID="createUserButton">
+              <Text style={styles.noAccountUnderline} >Sign Up</Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <View style={styles.noAccount}>
-          <Text style={styles.noAccountText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://dashboard.waziup.io/')} testID="createUserButton">
-            <Text style={styles.noAccountUnderline} >Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     )
   }
