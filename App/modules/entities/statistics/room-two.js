@@ -36,21 +36,21 @@ export default class RoomTwo extends Component {
     }
 
     renderGasReading = (gasVal) => {
-        if (gasVal.value.value < 351) {
+        if (gasVal.value.value < 601) {
             console.tron.log('Air quality is good')
             return (
                 <View style={[styles.motion_not_detected, { backgroundColor: Colors.leaves }]}>
                     <Text style={styles.welcomeText}>Air quality is good</Text>
                 </View>
             )
-        } else if (gasVal.value.value > 350 && gasVal.value.value < 501) {
+        } else if (gasVal.value.value > 600 && gasVal.value.value < 701) {
             console.tron.log("Air quality is poor")
             return (
                 <View style={[styles.motion_not_detected, { backgroundColor: Colors.bloodOrange }]}>
                     <Text style={styles.welcomeText}>Air quality is poor</Text>
                 </View>
             )
-        } else if (gasVal.value.value > 500) {
+        } else if (gasVal.value.value > 700) {
             console.tron.log("Air is toxic")
             return (
                 <View style={[styles.motion_not_detected, { backgroundColor: Colors.fire, flexDirection: 'row', justifyContent: 'center' }]}>

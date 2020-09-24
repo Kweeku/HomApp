@@ -120,17 +120,17 @@ class LightScreen extends React.Component {
     }
 
     renderGasReading = (gasVal) => {
-        if (gasVal.value.value < 351) {
+        if (gasVal.value.value < 601) {
             console.tron.log('Air quality is good')
             return (
                 <Text style={[styles.welcomeText, { color: Colors.leaves }]}>Air quality is good</Text>
             )
-        } else if (gasVal.value.value > 350 && gasVal.value.value < 501) {
+        } else if (gasVal.value.value > 600 && gasVal.value.value < 701) {
             console.tron.log("Air quality is poor")
             return (
                 <Text style={[styles.welcomeText, { color: Colors.bloodOrange }]}>Air quality is poor</Text>
             )
-        } else if (gasVal.value.value > 500) {
+        } else if (gasVal.value.value > 700) {
             console.tron.log("Air is toxic")
             return (
                 <View style={{ flexDirection: 'row' }}>
