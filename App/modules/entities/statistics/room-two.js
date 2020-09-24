@@ -53,9 +53,9 @@ export default class RoomTwo extends Component {
         } else if (gasVal.value.value > 500) {
             console.tron.log("Air is toxic")
             return (
-                <View style={[styles.motion_not_detected, { backgroundColor: Colors.fire, flexDirection: 'row', justifyContent:'space-evenly' }]}>
-                    <Icon name='alert-triangle' size={40} color={Colors.banner} />
-                    <Text style={styles.welcomeText}>Air is toxic</Text>
+                <View style={[styles.motion_not_detected, { backgroundColor: Colors.fire, flexDirection: 'row', justifyContent: 'center' }]}>
+                    <Icon name='alert-triangle' size={45} color={Colors.bronze} />
+                    <Text style={styles.welcomeText}>   Air is toxic</Text>
                 </View>
             )
         }
