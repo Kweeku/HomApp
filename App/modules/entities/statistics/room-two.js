@@ -10,7 +10,8 @@ import {
     ContributionGraph,
     StackedBarChart
 } from "react-native-chart-kit";
-import styles from './statistics-screen.styles'
+import styles from './statistics-screen.styles';
+import Icon from 'react-native-vector-icons/Feather'
 
 export default class RoomTwo extends Component {
     static propTypes = {
@@ -35,11 +36,29 @@ export default class RoomTwo extends Component {
     }
 
     renderGasReading = (gasVal) => {
-        return (
-            <View style={styles.motion_not_detected}>
-                <Text style={styles.welcomeText}>Gas Level: {gasVal.value.value}</Text>
-            </View>
-        )
+        if (gasVal.value.value < 351) {
+            console.tron.log('Air quality is good')
+            return (
+                <View style={[styles.motion_not_detected, { backgroundColor: Colors.leaves }]}>
+                    <Text style={styles.welcomeText}>Air quality is good</Text>
+                </View>
+            )
+        } else if (gasVal.value.value > 350 && gasVal.value.value < 501) {
+            console.tron.log("Air quality is poor")
+            return (
+                <View style={[styles.motion_not_detected, { backgroundColor: Colors.bloodOrange }]}>
+                    <Text style={styles.welcomeText}>Air quality is poor</Text>
+                </View>
+            )
+        } else if (gasVal.value.value > 500) {
+            console.tron.log("Air is toxic")
+            return (
+                <View style={[styles.motion_not_detected, { backgroundColor: Colors.fire, flexDirection: 'row', justifyContent:'space-evenly' }]}>
+                    <Icon name='alert-triangle' size={40} color={Colors.banner} />
+                    <Text style={styles.welcomeText}>Air is toxic</Text>
+                </View>
+            )
+        }
     }
 
     render() {

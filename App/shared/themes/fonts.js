@@ -59,6 +59,10 @@ const style = {
   empty: {
     fontFamily: type.empty,
     fontSize: size.regular
+  },
+  temp: {
+    fontFamily: type.text,
+    fontSize: 64
   }
 }
 

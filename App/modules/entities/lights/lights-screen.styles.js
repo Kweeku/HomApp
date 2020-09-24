@@ -121,4 +121,22 @@ export default StyleSheet.create({
         marginVertical: sizeWidth(1),
         paddingHorizontal: sizeWidth(1),
     },
+    weather: {
+        flex: 1,
+        alignItems: 'center',
+        margin: 15,
+        borderRadius: 8,
+        paddingVertical: 20,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        elevation: 2,
+        backgroundColor: Colors.snow,
+        ...Fonts.style.normal
+    },
+    temp: {
+        textAlign: 'center',
+        marginLeft: 15,
+        color: Colors.panther,
+        ...Fonts.style.temp
+    },
 })

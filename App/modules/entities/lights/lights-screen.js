@@ -11,6 +11,11 @@ import ActuatorActions from './actuator.reducer'
 import DeviceActions from '../../account/device/device.reducer'
 import LoginActions from '../../login/login.reducer';
 import ItemActuator from './ItemActuator'
+import { Metrics, ApplicationStyles, Colors } from '../../../shared/themes'
+import Icon from 'react-native-vector-icons/Feather'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 
 let credentials = null;
 
@@ -25,6 +30,9 @@ class LightScreen extends React.Component {
             loading: false,
             activeSections: [],
             actuators: [],
+            tempVal: [],
+            gasVal: [],
+            humVal: [],
         }
         // Navigation.events().bindComponent(this)
         this.setActuators();
@@ -33,24 +41,37 @@ class LightScreen extends React.Component {
 
     setActuators() {
         if (this.props.devices) {
-            this.setState({
-                devices: this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com'),
-                actuators: this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com').forEach(element => {
-                    if (element.sensors.length > 0) {
-                        const actuatorName = element.name;
-                        const actuatorId = element.id
-                        element.sensors.filter(sensor => sensor.sensor_kind ==="OtherDevice").forEach(element => {
-                            const actuator = {};
-                            Object.assign(actuator, element);
-                            actuator.deviceName = actuatorName;
-                            actuator.deviceId = actuatorId;
-                            this.state.actuators.push(actuator)
-                        });
+            this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com').forEach(element => {
+                if (element.sensors.length > 0) {
+                    const actuatorName = element.name;
+                    const actuatorId = element.id
+                    element.sensors.filter(sensor => sensor.sensor_kind === "OtherDevice").forEach(element => {
+                        const actuator = {};
+                        Object.assign(actuator, element);
+                        actuator.deviceName = actuatorName;
+                        actuator.deviceId = actuatorId;
+                        this.state.actuators.push(actuator)
+                    });
+                    const temp = element.sensors.filter(sensor => sensor.id === "TC");
+                    const gas = element.sensors.filter(sensor => sensor.id === "GS");
+                    const hum = element.sensors.filter(sensor => sensor.id === "HU");
+                    if (temp.length > 0) {
+                        this.state.tempVal.push(temp)
                     }
-                }),
-                // loading: false
-            });
+                    if (gas.length > 0) {
+                        this.state.gasVal.push(gas)
+                    }
+                    if (hum.length > 0) {
+                        this.state.humVal.push(hum)
+                    }
+                }
+            })
+
+            // loading: false
             console.tron.log(this.state.actuators);
+            console.tron.log(this.state.tempVal);
+            console.tron.log(this.state.gasVal);
+            console.tron.log(this.state.humVal);
         }
 
     }
@@ -98,7 +119,41 @@ class LightScreen extends React.Component {
 
     }
 
+    renderGasReading = (gasVal) => {
+        if (gasVal.value.value < 351) {
+            console.tron.log('Air quality is good')
+            return (
+                <Text style={[styles.welcomeText, { color: Colors.leaves }]}>Air quality is good</Text>
+            )
+        } else if (gasVal.value.value > 350 && gasVal.value.value < 501) {
+            console.tron.log("Air quality is poor")
+            return (
+                <Text style={[styles.welcomeText, { color: Colors.bloodOrange }]}>Air quality is poor</Text>
+            )
+        } else if (gasVal.value.value > 500) {
+            console.tron.log("Air is toxic")
+            return (
+                <View style={{ flexDirection: 'row' }}>
+                    <Icon name='alert-triangle' size={25} color={Colors.bronze} />
+                    <Text style={[styles.welcomeText, { color: Colors.fire }]}> Air is toxic</Text>
+                </View>
+            )
+        }
+    }
+
     render() {
+        const { tempVal, gasVal, humVal } = this.state
+        const temp = tempVal ? tempVal[0] : [];
+        const gas = gasVal ? gasVal[0] : [];
+        const hum = humVal ? humVal[0] : [];
+
+        const T = temp ? temp[0] : []
+        const g = gas ? gas[0] : []
+        const H = hum ? hum[0] : []
+
+        console.tron.log(T)
+        console.tron.log(g)
+        console.tron.log(H)
 
         return (
             <View style={styles.mainContainer} testID="lightScreen">
@@ -107,6 +162,18 @@ class LightScreen extends React.Component {
                         {/* <Image source={Images.logoJhipster} style={styles.logo} />
                         <Text style={styles.welcomeText}>{'Welcome to your Ignite JHipster app.'}</Text> */}
                     </View>
+                    {temp.length > 0 &&
+                        <View style={styles.weather}>
+                            <Text style={styles.list_item}>Indoor</Text>
+                            <View style={{ flexDirection: 'row', padding: 10 }}>
+                                <FontAwesome5 name='temperature-high' size={20} color={Colors.fire} style={{ marginTop: 35 }} />
+                                <Text style={styles.temp}>{T.value.value}</Text>
+                                <MCIcons name='temperature-celsius' size={44} color={Colors.panther} style={{ marginTop: 10 }} />
+                            </View>
+                            <Text style={[styles.welcomeText, { color: Colors.facebook, marginBottom: 10, fontSize: 16 }]}>Humidity: {H.value.value}%</Text>
+                            {this.renderGasReading(g)}
+                        </View>
+                    }
                     <View style={styles.centered}>
                         <Text style={styles.title}>SWITCHES</Text>
                     </View>

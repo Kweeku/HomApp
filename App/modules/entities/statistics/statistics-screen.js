@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Image, View, Platform, Button, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, Image, View, Platform, Button, TouchableOpacity, RefreshControl } from 'react-native'
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
@@ -23,8 +23,6 @@ class StatisticScreen extends Component {
         super(props)
         // Navigation.events().bindComponent(this)
         this.state = {
-            fetching: false,
-            fetchingDevices: false,
             devices: null,
             sensor1: null,
             tempValues: null,
@@ -39,6 +37,8 @@ class StatisticScreen extends Component {
             sensors: [],
             sort: 'asc',
             limit: 10,
+            refreshing: false,
+            updating: false,
         }
         this.fetchAll();
     }
@@ -79,18 +79,20 @@ class StatisticScreen extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        let nextLoading = nextProps.fetchingDevices || nextProps.fetching;
+        let nextLoading = nextProps.fetching;
         if (nextLoading !== prevState.loading) {
             return { loading: nextLoading };
         }
 
-        if (nextProps.fetchingDevices !== prevState.fetchingDevices) {
-            return { fetchingDevices: nextProps.fetchingDevices };
-        }
-
-        // if (nextProps.fetching !== prevState.fetching) {
-        //     return { fetching: nextProps.fetching };
+        // if (nextProps.fetchingDevices !== prevState.fetchingDevices) {
+        //     return { fetchingDevices: nextProps.fetchingDevices };
         // }
+
+        if (nextProps.fetching !== prevState.fetching) {
+            return { fetching: nextProps.fetching };
+        }
+        
+
         else return null;
     }
 
@@ -103,7 +105,7 @@ class StatisticScreen extends Component {
         if (this.props.devices && !prevProps.devices) {
             this.setState({
                 devices: this.props.devices.filter(device => device.owner === 'adubenedict10@gmail.com'),
-                // loading: false
+                refreshing: false
             });
             if (this.state.devices !== null) {
                 this.state.devices.filter(device => device.id === 'b827eb500178_3').forEach(element => {
@@ -157,11 +159,15 @@ class StatisticScreen extends Component {
         }
     }
 
+    onRefresh = () => {
+        this.setState({ refreshing: true });
+        console.tron.log('Refresh initiated');
+        this.fetchAll();
+    }
+
     render() {
         const {
             devices,
-            sort,
-            limit,
             tempValues,
             tempTimestamp,
             date,
@@ -169,15 +175,19 @@ class StatisticScreen extends Component {
             motionVal,
             gasVal,
             humVal,
-            sensor1,
-            sensors
+            refreshing
         } = this.state;
 
+        //Add Pull Down to Refresh
         return (
             <View style={styles.mainContainer} testID="statisticScreen">
                 <Spinner
                     visible={this.state.loading} />
-                <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
+                <ScrollView
+                    contentInsetAdjustmentBehavior="automatic"
+                    style={styles.scrollView}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.onRefresh} />}
+                >
                     <View style={styles.centered}>
                         <Text style={styles.title}>ROOM ONE</Text>
                     </View>
@@ -225,7 +235,7 @@ const mapStateToProps = (state) => {
     return {
         // for developer convenience
         fetchingData: state.sensor.fetchingData,
-        fetchingDevices: state.device.fetchingAll,
+        fetching: state.device.fetchingAll,
         devices: state.device.devices,
         sensorData: state.sensor.sensorData
     }
