@@ -6,6 +6,7 @@ import { isLoggedIn } from '../../shared/reducers/account.reducer'
 import { connect } from 'react-redux'
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Colors } from '../../shared/themes'
 
 import ApplianceScreen from '../../modules/entities/appliances/appliances-screen'
@@ -13,6 +14,7 @@ import LightScreen from '../../modules/entities/lights/lights-screen'
 import SocketScreen from '../../modules/entities/sockets/sockets-screen'
 import StatisticScreen from '../../modules/entities/statistics/statistics-screen'
 import { LOGIN_SCREEN } from '../../navigation/layouts';
+import Settings from '../account/settings/settingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -103,8 +105,8 @@ class TabRouter extends React.Component {
               } else if (route.name === 'Home') {
                 iconName = 'home-city';
                 color = focused ? Colors.bronze : Colors.darkAsh
-              } else if (route.name === 'Sockets') {
-                iconName = 'power-socket-uk';
+              } else if (route.name === 'Settings') {
+                iconName = 'settings';
                 color = focused ? Colors.bronze : Colors.darkAsh
               } else if (route.name === 'Statistics') {
                 iconName = 'home-analytics';

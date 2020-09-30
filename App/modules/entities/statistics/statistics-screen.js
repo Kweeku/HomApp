@@ -35,7 +35,7 @@ class StatisticScreen extends Component {
             loading: false,
             activeSections: [],
             sensors: [],
-            sort: 'asc',
+            sort: 'dsc',
             limit: 10,
             refreshing: false,
             updating: false,
@@ -79,19 +79,19 @@ class StatisticScreen extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        let nextLoading = nextProps.fetching;
+        let nextLoading = nextProps.fetching || nextProps.fetchingData;
         if (nextLoading !== prevState.loading) {
             return { loading: nextLoading };
         }
 
-        // if (nextProps.fetchingDevices !== prevState.fetchingDevices) {
-        //     return { fetchingDevices: nextProps.fetchingDevices };
-        // }
+        if (nextProps.fetchingData !== prevState.fetchingData) {
+            return { fetchingData: nextProps.fetchingData };
+        }
 
         if (nextProps.fetching !== prevState.fetching) {
             return { fetching: nextProps.fetching };
         }
-        
+
 
         else return null;
     }
@@ -207,7 +207,7 @@ class StatisticScreen extends Component {
                     </View>
                     <View style={styles.hairline} />
                     <View style={styles.body}>
-                        {devices === null &&
+                        {tempValues === null &&
                             <View>
                                 <Text style={styles.empty_list}>Sorry, there's no data available at this moment.</Text>
                             </View>

@@ -25,6 +25,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@js-joda/core": "^3.2.0",
     "@react-native-community/async-storage": "1.9.0",
     "@react-navigation/bottom-tabs": "^5.7.1",
     "@react-navigation/native": "^5.7.0",
@@ -47,9 +48,11 @@
     "react-native-keyboard-aware-scroll-view": "0.9.1",
     "react-native-keychain": "^6.1.1",
     "react-native-loading-spinner-overlay": "^1.1.0",
+    "react-native-minimal-settings": "^1.0.9",
     "react-native-navigation": "6.4.0",
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",
+    "react-native-settings-list": "^1.8.0",
     "react-native-simple-toast": "^1.1.2",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^7.0.0",

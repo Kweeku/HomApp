@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, Image, View, Platform, Button, FlatList } from 'react-native'
+import { ScrollView, Text, Image, View, Platform, Button, FlatList, Modal } from 'react-native'
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
@@ -15,6 +15,7 @@ import { Metrics, ApplicationStyles, Colors } from '../../../shared/themes'
 import Icon from 'react-native-vector-icons/Feather'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AntIcon from 'react-native-vector-icons/AntDesign';
 
 
 let credentials = null;
@@ -33,6 +34,9 @@ class LightScreen extends React.Component {
             tempVal: [],
             gasVal: [],
             humVal: [],
+            motionVaues: [],
+            visible: false,
+            room: ''
         }
         // Navigation.events().bindComponent(this)
         this.setActuators();
@@ -55,6 +59,13 @@ class LightScreen extends React.Component {
                     const temp = element.sensors.filter(sensor => sensor.id === "TC");
                     const gas = element.sensors.filter(sensor => sensor.id === "GS");
                     const hum = element.sensors.filter(sensor => sensor.id === "HU");
+                    element.sensors.filter(sensor => sensor.id === "MT").forEach(element => {
+                        const motionVals = {};
+                        Object.assign(motionVals, element);
+                        motionVals.deviceName = actuatorName;
+                        motionVals.deviceId = actuatorId;
+                        this.state.motionVaues.push(motionVals)
+                    });
                     if (temp.length > 0) {
                         this.state.tempVal.push(temp)
                     }
@@ -116,7 +127,46 @@ class LightScreen extends React.Component {
     }
 
     componentDidUpdate(prevState, prevProps) {
+        let arrayLength = this.state.motionVaues.length;
+        if (arrayLength > 0 && this.props.devices) {
+            for (let i = 0; i < arrayLength; i++) {
+                console.tron.log(this.state.motionVaues[i]);
+                //Do something
+                let element = this.state.motionVaues[i]
+                if (element.value.value === 1) {
+                    this.setState({ visible: true })
+                    if (this.state.motionVaues[i].deviceId === 'b827eb500178_3') {
+                        this.setState({ room: 'Room Two' })
+                    } else if (this.state.motionVaues[i].deviceId === 'b827eb500178_2') {
+                        this.setState({ room: 'Room One' })
+                    }
+                }
+            }
+        }
+        console.tron.log(this.state.visible);
+    }
 
+    triggerModal = () => {
+        this.setState({ visible: !this.state.visible })
+    }
+
+    renderModal = () => {
+        <View>
+            <Modal
+                // animationType="slide"
+                transparent={true}
+                visible={this.state.visible}
+                animationType="fade"
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <AntIcon name='closecircleo' size={25} color={COLOR_APP_WHITE} onPress={() => this.triggerModal()} style={styles.right} />
+                        <Icon name='alert-triangle' size={70} color={Colors.bronze} />
+                        <Text>Security Breached {this.state.room}</Text>
+                    </View>
+                </View>
+            </Modal>
+        </View>
     }
 
     renderGasReading = (gasVal) => {

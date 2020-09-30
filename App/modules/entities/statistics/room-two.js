@@ -74,11 +74,6 @@ export default class RoomTwo extends Component {
                     color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
                     strokeWidth: 2 // optional
                 },
-                // {
-                //     data: [30, 65, 48, 120, 199, 73],
-                //     color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-                //     strokeWidth: 2 // optional
-                // }
             ],
             legend: [`Temperature Readings for ${this.props.date}`] // optional
         };
@@ -137,6 +132,7 @@ export default class RoomTwo extends Component {
                             data={data}
                             width={Dimensions.get('screen').width - 35}
                             height={220}
+                            fromZero={true}
                             chartConfig={chartConfig}
                             style={{
                                 borderRadius: 15,
